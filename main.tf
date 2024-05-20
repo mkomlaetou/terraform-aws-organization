@@ -25,10 +25,10 @@ resource "aws_organizations_organizational_unit" "org_ou" {
 resource "aws_organizations_account" "aws_acc" {
   for_each          = var.aws_accounts_info
   name              = each.key
-  email             = each.value[0]
+  email             = local.member_account_emails[each.key]
   role_name         = "OrganizationAccountAccessRole"
-  parent_id         = var.unmanaged_ou == true ? each.value[1] : aws_organizations_organizational_unit.org_ou["${each.value[1]}"].id
-  close_on_deletion = each.value[2]
+  parent_id         = var.unmanaged_ou == true ? each.value["ou_id"] : aws_organizations_organizational_unit.org_ou["${each.value["ou_name"]}"].id
+  close_on_deletion = each.value["cod"]
 
   lifecycle {
     ignore_changes = [role_name]
@@ -37,6 +37,5 @@ resource "aws_organizations_account" "aws_acc" {
 
   depends_on = [ aws_organizations_organizational_unit.org_ou ]
 }
-
 
 

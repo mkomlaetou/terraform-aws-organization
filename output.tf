@@ -14,7 +14,7 @@ output "ou_details" {
   value       = { for k, ou in aws_organizations_organizational_unit.org_ou : k => { "id" = ou.id, "arn" = ou.arn } }
 }
 
-output "account_details"{
+output "aws_account_details"{
   description = "account details and arn"
   value = {for k, acc in aws_organizations_account.aws_acc : k => {"id" = acc.id, "arn" = acc.arn}}
 
