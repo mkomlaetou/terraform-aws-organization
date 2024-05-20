@@ -12,6 +12,7 @@ It can also be used to create one or more AWS account in OUs managed outside ter
 
 When no var.aws_accounts_info["email] is set, the module will create a new AWS account with the email "master_account_email+aws_account_name@domain_name"
 
+
 ## Requirements
 
 | Name | Version |
@@ -82,7 +83,7 @@ provider "aws" {
 
 // MODULE CALL
 module "xyz_org" {
-  source = "../modules/terraform-aws-organization"
+  source = "mkomlaetou/organization/aws"
 
   organizational_units = var.organizational_units
   aws_accounts_info    = var.aws_accounts_info

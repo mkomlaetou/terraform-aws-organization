@@ -56,7 +56,6 @@ variable "aws_accounts_info" {
     }
   ))
   default = {}
-
 }
 
 variable "master_account_email" {
@@ -66,19 +65,8 @@ variable "master_account_email" {
 }
 
 
-
 variable "additional_tags" {
   description = "additional tags"
   type        = map(string)
   default     = {}
-}
-
-
-
-output "master_account_email" {
-  value = local.master_account_email
-}
-
-output "member_account_emails" {
-  value = local.member_account_emails
 }

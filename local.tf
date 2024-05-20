@@ -16,9 +16,3 @@ locals {
   member_account_emails = { for k, v in var.aws_accounts_info : k =>  v.email != "" ? v.email : join("@", ["${local.master_account_email[0]}+${k}", local.master_account_email[1]])}
 
 }
-
-
-# import {
-#   id = "o-731rbjckbt"
-#   to = aws_organizations_organization.org[0]
-# }
