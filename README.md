@@ -8,8 +8,9 @@ By default this module can be used to:
 
 It can also be used to create one or more OU in an existing Organization by setting var.new_org = false and var.org_root_id = "root_id"
 
-It can also be used to create one or more AWS account in OUs managed outside terraform by setting var.unmanaged_accounts = true and use "ou_id" instead of "ou_name" in var.aws_accounts_info.
+It can also be used to create one or more AWS account in OUs managed outside terraform by setting var.unmanaged_accounts = true and the var.aws_accounts_info["ou_id] = "ou_id".
 
+When no var.aws_accounts_info["email] is set, the module will create a new AWS account with the email "master_account_email+aws_account_name@domain_name"
 
 ## Requirements
 
@@ -41,9 +42,10 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_additional_tags"></a> [additional\_tags](#input\_additional\_tags) | additional tags | `map(string)` | `{}` | no |
-| <a name="input_aws_accounts_info"></a> [aws\_accounts\_info](#input\_aws\_accounts\_info) | aws account email, OU\_name or OU\_ID, close\_on\_deletion | `map(tuple([ string, string, bool ]))` | `{}` | no |
+| <a name="input_aws_accounts_info"></a> [aws\_accounts\_info](#input\_aws\_accounts\_info) | aws account email, OU\_name, OU\_ID, close\_on\_deletion | <pre>map(object({<br>    email   = optional(string, "")<br>    ou_name = optional(string, "")<br>    ou_id   = optional(string, "")<br>    cod     = optional(bool, false) // close_on_deletion<br>    }<br>  ))</pre> | `{}` | no |
 | <a name="input_close_on_deletion"></a> [close\_on\_deletion](#input\_close\_on\_deletion) | close account when removed from Org | `bool` | `false` | no |
 | <a name="input_enabled_policy_types"></a> [enabled\_policy\_types](#input\_enabled\_policy\_types) | default enabled policy types | `list(string)` | <pre>[<br>  "TAG_POLICY",<br>  "SERVICE_CONTROL_POLICY"<br>]</pre> | no |
+| <a name="input_master_account_email"></a> [master\_account\_email](#input\_master\_account\_email) | master account email, required if new\_org is false | `string` | `""` | no |
 | <a name="input_new_org"></a> [new\_org](#input\_new\_org) | value to control creation of new organization | `bool` | `true` | no |
 | <a name="input_org_principals"></a> [org\_principals](#input\_org\_principals) | values of aws\_service\_access\_principals | `list(string)` | <pre>[<br>  "cloudtrail.amazonaws.com",<br>  "config.amazonaws.com"<br>]</pre> | no |
 | <a name="input_org_root_id"></a> [org\_root\_id](#input\_org\_root\_id) | existing organization root id | `string` | `null` | no |
@@ -54,10 +56,11 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_account_details"></a> [account\_details](#output\_account\_details) | account details and arn |
+| <a name="output_aws_account_details"></a> [aws\_account\_details](#output\_aws\_account\_details) | account details and arn |
+| <a name="output_master_account_email"></a> [master\_account\_email](#output\_master\_account\_email) | n/a |
+| <a name="output_member_account_emails"></a> [member\_account\_emails](#output\_member\_account\_emails) | n/a |
 | <a name="output_org_details"></a> [org\_details](#output\_org\_details) | org id, master account id and master account email |
 | <a name="output_ou_details"></a> [ou\_details](#output\_ou\_details) | Organizational Unit detail |
-
 
 
 ## SAMPLE CODE
@@ -95,15 +98,27 @@ variable "organizational_units" {
 
 variable "aws_accounts_info" {
   default = {
-      "xyz-aws-dev"     = ["aws+dev@xyz.com", "DEV", true]
-      "xyz-aws-staging" = ["aws+staging@xyz.com", "STAGING", true]
-      "xyz-aws-prod"    = ["aws+prod@xyz.com", "PROD", true]
+    xyz-aws-dev = {
+      ou_name = "RETIRED",
+      email   = "xyz@gmail.com",
+      cod     = true
+    }
+
+    xyz-aws-staging = {
+      ou_name = "STAGING",
+      cod     = true
+    }
+
+    xyz-aws-production = {
+      ou_name = "PROD",
+      cod     = true
+    }
   }
 }
 
 variable "additional_tags" {
   default = {
-    environment     = "dev"
+    environment     = "management"
   }
 }
 
