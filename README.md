@@ -100,7 +100,14 @@ module "xyz_org" {
 // OUs to be created
 variable "organizational_units" {
   type    = list(string)
-  default = ["GLOBAL", "DEV", "STAGING", "PROD", "SECURITY", "RETIRED"]
+  default = [
+       "GLOBAL",
+       "DEV",
+       "STAGING",
+       "PROD",
+       "SECURITY",
+       "RETIRED"
+   ]
 }
 
 
@@ -109,7 +116,7 @@ variable "aws_accounts_info" {
   default = {
     xyz-aws-dev = {
       ou_name = "DEV",
-      email   = "m.komlaetou+xdev@gmail.com",
+      email   = "xyz+xdev@gmail.com",
       cod     = true
     }
 
