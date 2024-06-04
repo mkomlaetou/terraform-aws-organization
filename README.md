@@ -87,7 +87,7 @@ provider "aws" {
 // MODULE CALL
 module "xyz_org" {
   source  = "mkomlaetou/organization/aws"
-  version = "1.1.0"
+  version = "1.1.1"
 
   organizational_units = var.organizational_units
   additional_tags      = var.additional_tags
