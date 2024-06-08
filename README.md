@@ -174,5 +174,23 @@ variable "additional_tags" {
 }
 
 
+output "ou_details" {
+  description = "Organizational Unit detail"
+  value       = module.xyz_org.ou_details
+}
+
+output "aws_account_details" {
+  description = "account details and arn"
+  value       = module.xyz_org.aws_account_details
+
+}
+
+output "org_details" {
+  value = module.xyz_org.org_details
+}
+
+
+
+
 
 ```
